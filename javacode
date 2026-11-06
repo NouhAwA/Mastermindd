@@ -1,0 +1,117 @@
+package Mastermind;
+
+import java.util.Scanner;
+
+public class Mastermind {
+
+	public static void main(String[] args) {
+
+		Scanner scanner = new Scanner(System.in);
+
+		String[] colors = { "red", "green", "orange", "yellow", "purple", "blue" };
+		String[] answer = { "red", "blue", "green", "yellow" };
+
+		int turn = 1;
+		boolean gameOver = false;
+
+		System.out.println("--------------------------------");
+		System.out.println("Welcome to Mastermind!");
+		System.out.println("Black = correct color and place");
+		System.out.println("White = correct color, wrong place");
+		System.out.println("Colors: red, green, orange, yellow, purple, blue");
+		System.out.println("You have 10 turns");
+		System.out.println("--------------------------------");
+
+		while (gameOver == false && turn <= 10) {
+
+			System.out.println("\nTurn " + turn);
+			System.out.println("Enter 4 colors:");
+
+			String[] guess = new String[4];
+			boolean valid = true;
+
+			for (int i = 0; i < 4; i++) {
+				guess[i] = scanner.next().toLowerCase();
+			}
+
+			for (int i = 0; i < 4; i++) {
+
+				boolean found = false;
+
+				for (int j = 0; j < colors.length; j++) {
+
+					if (guess[i].equals(colors[j])) {
+						found = true;
+					}
+				}
+
+				if (found == false) {
+					valid = false;
+				}
+			}
+
+			if (valid == false) {
+				System.out.println("Invalid color!");
+				System.out.println("Try again.");
+				continue;
+			}
+
+			int black = 0;
+			int white = 0;
+
+			boolean[] answerUsed = new boolean[4];
+			boolean[] guessUsed = new boolean[4];
+
+			for (int i = 0; i < 4; i++) {
+
+				if (guess[i].equals(answer[i])) {
+					black++;
+					answerUsed[i] = true;
+					guessUsed[i] = true;
+				}
+			}
+
+			for (int i = 0; i < 4; i++) {
+
+				if (guessUsed[i] == false) {
+
+					for (int j = 0; j < 4; j++) {
+
+						if (answerUsed[j] == false && guess[i].equals(answer[j])) {
+
+							white++;
+							answerUsed[j] = true;
+							break;
+						}
+					}
+				}
+			}
+
+			System.out.println();
+			System.out.println("Black pins: " + black);
+			System.out.println("White pins: " + white);
+
+			if (black == 4) {
+				System.out.println("You won!");
+				gameOver = true;
+			}
+
+			if (turn == 10 && gameOver == false) {
+
+				System.out.println("GAME OVER!");
+				System.out.println("The correct code was:");
+
+				for (int i = 0; i < 4; i++) {
+					System.out.print(answer[i] + " ");
+				}
+
+				System.out.println();
+				gameOver = true;
+			}
+
+			turn++;
+		}
+
+		scanner.close();
+	}
+}
